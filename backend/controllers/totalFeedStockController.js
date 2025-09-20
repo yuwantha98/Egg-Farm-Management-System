@@ -42,3 +42,41 @@ export const listTotals = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// Get total by feedId
+export const getTotalByFeedId = async (req, res) => {
+  try {
+    const { feedId } = req.params;
+    const doc = await TotalFeedStock.findOne({ feedId: parseInt(feedId) });
+
+    if (!doc) {
+      return res
+        .status(404)
+        .json({ message: "Total not found for this feedId" });
+    }
+
+    res.json(doc);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Delete total by feedId
+export const deleteTotalByFeedId = async (req, res) => {
+  try {
+    const { feedId } = req.params;
+    const doc = await TotalFeedStock.findOneAndDelete({
+      feedId: parseInt(feedId),
+    });
+
+    if (!doc) {
+      return res
+        .status(404)
+        .json({ message: "Total not found for this feedId" });
+    }
+
+    res.json({ message: "Total deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
